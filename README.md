@@ -1,7 +1,8 @@
 # UrlShortener
-Install all the dependecies using `npm intall`.
+Install all the dependecies using `npm install`.
 
 Start the server using - `npm start` 
+
 Hop on to http://localhost:8001/ to visit  the home page.
 You will be asked to login incase everything goes right:p .
 
