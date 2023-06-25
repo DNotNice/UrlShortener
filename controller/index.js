@@ -1,8 +1,9 @@
 const shortId = require('shortid')
-const URL  = require('../models/index.js') 
+const URL  = require('../models/index.js'); 
+const { all } = require('../routes/staticRouter.js');
 
 async function generateShortURL(req ,res){
-    const ogurl = req.body.url 
+    const ogurl =  req.body.url 
     if(!ogurl) return res.status(400).json({err : 'no url passed'})
     const sid = shortId.generate();
     await URL.create({
@@ -12,11 +13,8 @@ async function generateShortURL(req ,res){
         visitedHistory : [],
         createdBy : req.user._id
     })
-    const allUrls = await URL.find({ createdBy : req.user._id})
-
-    return res.render("home" ,{
-        urls:allUrls
-    })
+    //const allUrls = await URL.find({ createdBy : req.user._id})
+    return res.redirect("/success")
 }
 
 async function redirectURL(req ,res){
@@ -40,4 +38,15 @@ async function getAnalytics(req, res){
         "analytics" : result.visitedHistory
      })
 }
-module.exports = {generateShortURL  , redirectURL , getAnalytics  }
+async function deleteUrl(req ,res){
+    const shortid = req.params.id
+    const ogshortid = shortid.substring(1);
+    if(!ogshortid) console.log('something is missing ')
+     const temp = await URL.findOneAndDelete({shortId : ogshortid}).then()
+    const allUrls = await URL.find({ createdBy : req.user._id})
+    return res.status(200).json({
+        urls:allUrls
+    })
+
+}
+module.exports = {generateShortURL  , redirectURL , getAnalytics ,deleteUrl }
