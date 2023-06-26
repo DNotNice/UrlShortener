@@ -35,4 +35,36 @@ async function login(req, res){
     res.cookie('uid' , sessionId)
     return res.redirect('/')
 }
-module.exports = {handleUserSignUp , login}
+async function updatePass(req, res){
+    try {
+    const emails = (req.params.email).substring(1)
+    const  pass = req.body.pass ;
+    const user = await USER.findOneAndUpdate({email :emails},  {password : pass} , {new :true})
+    return res.status(200).json({
+        message : 'pasword updated successfully'
+    })} catch (error) {
+        console.log(error)
+      return res.status(400).json({
+        err : error
+      })   
+    }
+}
+async function checkEmail(req, res){
+    try {
+        const email = (req.params.email).substring(1)
+        
+        const user = await USER.findOne({email:email})
+            if(user) { return res.status(200).json({
+                message : "user exists"
+            }) } else {
+                return res.status(400).json({
+                    message :"no user exists with this email "
+                })
+            }
+    } catch (error) {
+        return res.status(400).json({
+            message :"no user exists with this email"
+        })
+    }
+}
+module.exports = {handleUserSignUp , login ,updatePass,checkEmail}

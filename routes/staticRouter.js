@@ -8,6 +8,9 @@ router.get('/' , async (req,res)=>{
         urls:allUrls
     })
 })
+router.get('/forgotPassword' , async(req ,res)=>{
+    res.render("forgotpassword")
+})
 router.get('/success' ,async (req,res)=>{
     const allUrls = await URL.find({ createdBy : req.user._id})
    //  const pre = 'http://localhost:8001/url/'
