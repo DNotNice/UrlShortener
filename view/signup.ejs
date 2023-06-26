@@ -24,7 +24,7 @@
     <div class="errorBox"> </div>
     <script>
         const form = document.getElementById("userDetails")
-        const errorBosx = document.getElementsByClassName("errorBox")
+        const errorBosx = document.querySelector(".errorBox")
         form.addEventListener("submit" , async(e)=>{
             e.preventDefault();
             const name = form.name.value
@@ -37,15 +37,16 @@
                     body : JSON.stringify({name , email , password}),
                     headers :  { 'Content-Type': 'application/json'}
                 })
-                if(res.status === 201){
-                    window.location.replace('/login')
-                }else{
-                    errorBosx.innerText("email already exists")
+                        const data =  await res.json()  
+                        console.log(data)
+                        if(res.ok) window.location.replace('/login')
+                        else errorBosx.textContent = data.message 
+                        console.log(data.message)// user already exists
+               
+                    
                 }
-               // console.log(res)
-    
-            } catch (error) {
-                
+                catch (error) {
+                    console.log(error)
             }
         })
         
